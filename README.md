@@ -8,7 +8,7 @@ An AI-powered web application that predicts startup success and forecasts future
 
 ## 📊 Live Demo
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://startup-predictor.streamlit.app)
+[![Streamlit App]([https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://startup-predictor.streamlit.app](https://startup-predictor-vqzdtqzhfqpdsus4htue5u.streamlit.app/))
 
 ## 📸 Screenshots Gallery
 
