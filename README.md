@@ -1,14 +1,73 @@
-# ⚡ Startup Success Predictor
+# 🚀 Startup Success Predictor
 
 An AI-powered web application that predicts startup success and forecasts future revenue using machine learning. Built with Streamlit, scikit-learn, and Plotly.
 
 ![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)
 ![Streamlit Version](https://img.shields.io/badge/streamlit-1.28.1-red.svg)
+![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Machine Learning](https://img.shields.io/badge/ML-Logistic%20Regression%20%7C%20Linear%20Regression-orange)
 
 ## 📊 Live Demo
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://startup-predictor.streamlit.app)
+
+## 📸 Screenshots Gallery
+
+### Dashboard Overview
+*Real-time KPIs and success rate visualizations*
+
+![Dashboard](screenshots/dashboard.png)
+*Dashboard showing key metrics, success rate by industry, and funding stage distribution*
+
+### Model Performance Metrics
+*Evaluate model accuracy and performance*
+
+![Model Metrics](screenshots/model-metrics.png)
+*Classification and regression metrics with confusion matrix*
+
+### Success Prediction
+*Predict if your startup will succeed or fail*
+
+![Success Prediction - Success Result](screenshots/success-prediction-success.png)
+*Example of a startup predicted to succeed with 71.3% confidence*
+
+![Success Prediction - Fail Result](screenshots/success-prediction-fail.png)
+*Example of a startup predicted to fail with 76.5% confidence*
+
+### Revenue Forecast
+*Forecast future revenue with percentile comparisons*
+
+![Revenue Forecast](screenshots/revenue-forecast.png)
+*Revenue prediction showing $10.2M projected revenue*
+
+### Data Explorer
+*Browse and filter through all startup records*
+
+![Data Explorer - Success Filter](screenshots/data-explorer-success.png)
+*Filtered view showing successful BioTech startups*
+
+![Data Explorer - Fail Filter](screenshots/data-explorer-fail.png)
+*Filtered view showing failed CleanTech startups*
+
+### Success Probability Gauge
+*Visual probability indicator for predictions*
+
+![Probability Gauge](screenshots/probability-gauge.png)
+*Interactive gauge showing success probability percentage*
+
+### Feature Correlation Heatmap
+*Understanding feature relationships*
+
+![Correlation Heatmap](screenshots/correlation-heatmap.png)
+*Correlation matrix showing relationships between features*
+
+### Model Comparison
+*Compare different model performances*
+
+![Model Comparison](screenshots/model-comparison.png)
+*Side-by-side comparison of Logistic vs Linear Regression*
+
+> **Note**: Screenshots are stored in the `screenshots/` folder. Create this folder and add your images with the names mentioned above.
 
 ## ✨ Features
 
