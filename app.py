@@ -149,8 +149,8 @@ with st.sidebar:
     )
     st.markdown("---")
     st.markdown("**Models**")
-    st.success("✅ Logistic Regression")
-    st.success("✅ Linear Regression")
+    st.info("Logistic Regression")
+    st.info("Linear Regression")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 1 — DASHBOARD
