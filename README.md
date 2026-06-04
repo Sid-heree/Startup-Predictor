@@ -31,9 +31,10 @@ An AI-powered web application that predicts startup success and forecasts future
 
 *Predict if your startup will succeed or fail*
 
-<img src="https://github.com/user-attachments/assets/c580bca6-2104-4559-81f2-413b4f028864" width="800" alt="Success Prediction - Success">
+<img src="<img width="2226" height="1120" alt="image" src="https://github.com/user-attachments/assets/24b10777-ef8a-4c1d-b190-b3be9d61cacb" />
+" width="800" alt="Success Prediction - Success">
 
-*Example of a startup predicted to succeed with 71.3% confidence*
+*Example of a startup predicted to succeed with 63.8% confidence*
 
 <img src="https://github.com/user-attachments/assets/e1699ccd-0ba0-4763-a4a9-c77326092d02" width="800" alt="Success Prediction - Fail">
 
