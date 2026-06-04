@@ -16,44 +16,49 @@ An AI-powered web application that predicts startup success and forecasts future
 ### Dashboard Overview
 *Real-time KPIs and success rate visualizations*
 
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](<img width="2218" height="1121" alt="Screenshot 2026-06-04 172124" src="https://github.com/user-attachments/assets/7a6a5de5-bf5e-4355-99c8-e4fe905f23d4" />
+)
 *Dashboard showing key metrics, success rate by industry, and funding stage distribution*
 
 ### Model Performance Metrics
 *Evaluate model accuracy and performance*
 
-![Model Metrics](screenshots/model-metrics.png)
+![Model Metrics](<img width="2233" height="1164" alt="Screenshot 2026-06-04 172140" src="https://github.com/user-attachments/assets/cb76bdfe-5562-4a05-919f-cf3c262275aa" />
+)
 *Classification and regression metrics with confusion matrix*
 
 ### Success Prediction
 *Predict if your startup will succeed or fail*
 
-![Success Prediction - Success Result](screenshots/success-prediction-success.png)
+![Success Prediction - Success Result](<img width="2176" height="1133" alt="Screenshot 2026-06-04 172233" src="https://github.com/user-attachments/assets/c580bca6-2104-4559-81f2-413b4f028864" />
+)
 *Example of a startup predicted to succeed with 71.3% confidence*
 
-![Success Prediction - Fail Result](screenshots/success-prediction-fail.png)
+![Success Prediction - Fail Result](<img width="2236" height="971" alt="Screenshot 2026-06-04 172248" src="https://github.com/user-attachments/assets/e1699ccd-0ba0-4763-a4a9-c77326092d02" />
+)
 *Example of a startup predicted to fail with 76.5% confidence*
 
 ### Revenue Forecast
 *Forecast future revenue with percentile comparisons*
 
-![Revenue Forecast](screenshots/revenue-forecast.png)
+![Revenue Forecast](<img width="2226" height="1188" alt="Screenshot 2026-06-04 172317" src="https://github.com/user-attachments/assets/5a4e18e5-4a20-40ea-ae79-bef32fbca2b5" />
+)
 *Revenue prediction showing $10.2M projected revenue*
 
 ### Data Explorer
 *Browse and filter through all startup records*
 
-![Data Explorer - Success Filter](screenshots/data-explorer-success.png)
+![Data Explorer - Success Filter](<img width="2239" height="1072" alt="Screenshot 2026-06-04 172355" src="https://github.com/user-attachments/assets/4a329f3e-ad11-4337-a84f-d68193d7ee7a" />
+)
 *Filtered view showing successful BioTech startups*
 
-![Data Explorer - Fail Filter](screenshots/data-explorer-fail.png)
+![Data Explorer - Fail Filter](<img width="2224" height="959" alt="Screenshot 2026-06-04 172510" src="https://github.com/user-attachments/assets/baa96e59-5f24-47b8-932a-ef69e5b477df" />
+)
 *Filtered view showing failed CleanTech startups*
 
 ### Success Probability Gauge
 *Visual probability indicator for predictions*
 
-![Probability Gauge](screenshots/probability-gauge.png)
-*Interactive gauge showing success probability percentage*
 
 ### Feature Correlation Heatmap
 *Understanding feature relationships*
