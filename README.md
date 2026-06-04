@@ -59,18 +59,6 @@ An AI-powered web application that predicts startup success and forecasts future
 *Visual probability indicator for predictions*
 
 
-### Feature Correlation Heatmap
-*Understanding feature relationships*
-
-![Correlation Heatmap](screenshots/correlation-heatmap.png)
-*Correlation matrix showing relationships between features*
-
-### Model Comparison
-*Compare different model performances*
-
-![Model Comparison](screenshots/model-comparison.png)
-*Side-by-side comparison of Logistic vs Linear Regression*
-
 > **Note**: Screenshots are stored in the `screenshots/` folder. Create this folder and add your images with the names mentioned above.
 
 ## ✨ Features
