@@ -4,7 +4,6 @@ An AI-powered web application that predicts startup success and forecasts future
 
 ![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)
 ![Streamlit Version](https://img.shields.io/badge/streamlit-1.28.1-red.svg)
-![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Machine Learning](https://img.shields.io/badge/ML-Logistic%20Regression%20%7C%20Linear%20Regression-orange)
 
 ## 📊 Live Demo
