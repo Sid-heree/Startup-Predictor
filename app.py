@@ -363,6 +363,7 @@ elif page == "🔮 Predict Success":
 
             st.markdown("<br>", unsafe_allow_html=True)
 
+            # Show result box
             if pred == 1:
                 st.markdown(f"""
                 <div class="success-box">
@@ -380,10 +381,10 @@ elif page == "🔮 Predict Success":
 
             st.markdown("<br>", unsafe_allow_html=True)
 
-            # Gauge chart
+            # GAUGE CHART - This should ALWAYS show for both success AND fail
             fig_g = go.Figure(go.Indicator(
                 mode="gauge+number",
-                value=round(prob[1] * 100, 1),
+                value=round(prob[1] * 100, 1),  # Always show success probability
                 title={"text": "Success Probability", "font": {"color": "white", "size": 14}},
                 gauge={
                     "axis": {"range": [0, 100], "tickcolor": "#555"},
