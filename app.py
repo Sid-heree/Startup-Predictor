@@ -286,7 +286,7 @@ elif page == "📊 Model Metrics":
             """, unsafe_allow_html=True)
         
         # Simple confusion matrix
-        st.markdown("###  Confusion Matrix")
+        st.markdown("### 📊 Confusion Matrix")
         cm = metrics['confusion_matrix']
         tn, fp, fn, tp = cm.ravel()
         
@@ -320,25 +320,25 @@ elif page == "📊 Model Metrics":
         st.warning("⚠️ Model metrics not found. Please run: `python train_model.py`")
 
 # ══════════════════════════════════════════════════════════════════════════════
-# PAGE 3 — PREDICT SUCCESS
+# PAGE 3 — PREDICT SUCCESS (All inputs in $M)
 # ══════════════════════════════════════════════════════════════════════════════
 elif page == "🔮 Predict Success":
     st.markdown('<div class="page-title">🔮 Predict Success</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-sub">Logistic Regression · Binary Classification</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-sub">Logistic Regression · Binary Classification (All values in $M)</div>', unsafe_allow_html=True)
 
     col_form, col_result = st.columns([1.3, 1])
 
     with col_form:
         c1, c2 = st.columns(2)
         with c1:
-            funding     = st.number_input("Funding ($K)", 100.0, 50000.0, 5000.0, 100.0)
+            funding     = st.number_input("Funding ($M)", 0.1, 50.0, 5.0, 0.1)
             years       = st.slider("Years Active", 0.5, 12.0, 3.0, 0.5)
             competitors = st.slider("# Competitors", 1, 80, 15)
             product_sc  = st.slider("Product Score (1–10)", 1, 10, 7)
-            marketing   = st.number_input("Marketing Spend ($K)", 10.0, 10000.0, 500.0, 100.0)
+            marketing   = st.number_input("Marketing Spend ($M)", 0.01, 10.0, 0.5, 0.1)
         with c2:
             team_size   = st.slider("Team Size", 2, 120, 25)
-            market_sz   = st.number_input("Market Size ($K TAM)", 10000.0, 5000000.0, 500000.0, 10000.0)
+            market_sz   = st.number_input("Market Size ($M TAM)", 10.0, 5000.0, 500.0, 10.0)
             customers   = st.number_input("Customer Count", 10, 10000, 500, 50)
             industry    = st.selectbox("Industry", INDUSTRIES)
             stage       = st.selectbox("Funding Stage", STAGES)
@@ -347,18 +347,14 @@ elif page == "🔮 Predict Success":
 
     with col_result:
         if predict_cls:
-            # Convert K → M for model
-            funding_m  = funding / 1000
-            market_m   = market_sz / 1000
-            mkt_sp_m   = marketing / 1000
-
+            # Inputs are already in $M - no conversion needed!
             ind_enc   = le_industry.transform([industry])[0]
             stage_enc = le_stage.transform([stage])[0]
 
             input_row = pd.DataFrame([[
-                funding_m, team_size, years, market_m,
+                funding, team_size, years, market_sz,
                 competitors, product_sc, customers,
-                mkt_sp_m, ind_enc, stage_enc
+                marketing, ind_enc, stage_enc
             ]], columns=FEAT_CLS)
 
             input_sc = sc_cls.transform(input_row)
@@ -384,7 +380,7 @@ elif page == "🔮 Predict Success":
 
             st.markdown("<br>", unsafe_allow_html=True)
 
-            # Gauge only
+            # Gauge chart
             fig_g = go.Figure(go.Indicator(
                 mode="gauge+number",
                 value=round(prob[1] * 100, 1),
@@ -422,28 +418,29 @@ elif page == "🔮 Predict Success":
                     <span style="color:#7c8cf8;font-weight:600;">Predict Success / Fail</span>
                 </div>
             </div>""", unsafe_allow_html=True)
+
 # ══════════════════════════════════════════════════════════════════════════════
-# PAGE 4 — REVENUE FORECAST
+# PAGE 4 — REVENUE FORECAST (All inputs in $M)
 # ══════════════════════════════════════════════════════════════════════════════
 elif page == "💰 Revenue Forecast":
     st.markdown('<div class="page-title">💰 Revenue Forecast</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-sub">Multiple Linear Regression · Revenue Prediction</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-sub">Multiple Linear Regression · Revenue Prediction (All values in $M)</div>', unsafe_allow_html=True)
 
     col_form, col_result = st.columns([1.3, 1])
 
     with col_form:
         c1, c2 = st.columns(2)
         with c1:
-            r_funding   = st.number_input("Funding ($K)", 100.0, 50000.0, 5000.0, 100.0, key="r_fund")
+            r_funding   = st.number_input("Funding ($M)", 0.1, 50.0, 5.0, 0.1, key="r_fund")
             r_team      = st.slider("Team Size", 2, 120, 25, key="r_team")
             r_years     = st.slider("Years Active", 0.5, 12.0, 3.0, 0.5, key="r_yr")
-            r_market    = st.number_input("Market Size ($K)", 10000.0, 5000000.0, 500000.0, 10000.0, key="r_mkt")
-            r_rev1      = st.number_input("Revenue Year 1 ($K)", 10.0, 20000.0, 1000.0, 100.0, key="r_rev1")
+            r_market    = st.number_input("Market Size ($M)", 10.0, 5000.0, 500.0, 10.0, key="r_mkt")
+            r_rev1      = st.number_input("Revenue Year 1 ($M)", 0.01, 20.0, 1.0, 0.1, key="r_rev1")
         with c2:
-            r_burn      = st.number_input("Burn Rate ($K/mo)", 1.0, 5000.0, 300.0, 50.0, key="r_burn")
+            r_burn      = st.number_input("Burn Rate ($M/mo)", 0.001, 5.0, 0.3, 0.05, key="r_burn")
             r_pscore    = st.slider("Product Score (1–10)", 1, 10, 7, key="r_ps")
             r_customers = st.number_input("Customer Count", 10, 10000, 500, 50, key="r_cust")
-            r_mktspend  = st.number_input("Marketing Spend ($K)", 10.0, 10000.0, 500.0, 100.0, key="r_mktsp")
+            r_mktspend  = st.number_input("Marketing Spend ($M)", 0.01, 10.0, 0.5, 0.1, key="r_mktsp")
             r_industry  = st.selectbox("Industry", INDUSTRIES, key="r_ind")
             r_stage     = st.selectbox("Funding Stage", STAGES, key="r_stg")
 
@@ -451,20 +448,14 @@ elif page == "💰 Revenue Forecast":
 
     with col_result:
         if predict_rev:
-            # Convert K → M for model
-            r_fund_m  = r_funding / 1000
-            r_mkt_m   = r_market  / 1000
-            r_rev1_m  = r_rev1    / 1000
-            r_burn_m  = r_burn    / 1000
-            r_mktsp_m = r_mktspend/ 1000
-
+            # Inputs are already in $M - no conversion needed!
             ind_enc2   = le_industry.transform([r_industry])[0]
             stage_enc2 = le_stage.transform([r_stage])[0]
 
             input_reg = pd.DataFrame([[
-                r_fund_m, r_team, r_years, r_mkt_m,
-                r_rev1_m, r_burn_m, r_pscore,
-                r_customers, r_mktsp_m, ind_enc2, stage_enc2
+                r_funding, r_team, r_years, r_market,
+                r_rev1, r_burn, r_pscore,
+                r_customers, r_mktspend, ind_enc2, stage_enc2
             ]], columns=FEAT_REG)
 
             input_reg_sc = sc_reg.transform(input_reg)
@@ -505,11 +496,11 @@ elif page == "💰 Revenue Forecast":
                 <div style="color:#aaa;font-size:0.85rem;margin-bottom:0.6rem;">Key Inputs Summary</div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
                     <span style="color:#666;font-size:0.82rem;">Funding</span>
-                    <span style="color:white;font-size:0.82rem;">{fmt_m(r_funding/1000)}</span>
+                    <span style="color:white;font-size:0.82rem;">{fmt_m(r_funding)}</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
                     <span style="color:#666;font-size:0.82rem;">Year 1 Revenue</span>
-                    <span style="color:white;font-size:0.82rem;">{fmt_m(r_rev1/1000)}</span>
+                    <span style="color:white;font-size:0.82rem;">{fmt_m(r_rev1)}</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;margin-bottom:0.4rem;">
                     <span style="color:#666;font-size:0.82rem;">Team Size</span>
@@ -556,7 +547,7 @@ elif page == "📊 Data Explorer":
 
     st.markdown(f"<p style='color:#666;font-size:0.82rem;'>{len(filtered)} records</p>", unsafe_allow_html=True)
 
-    # Keep values in $M (no conversion to K)
+    # Keep values in $M
     display = filtered.copy()
     
     display = display.rename(columns={
