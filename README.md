@@ -6,9 +6,9 @@ An AI-powered web application that predicts startup success and forecasts future
 ![Streamlit Version](https://img.shields.io/badge/streamlit-red.svg)
 ![Machine Learning](https://img.shields.io/badge/ML-Logistic%20Regression%20%7C%20Linear%20Regression-orange)
 
-## 📊 Live Demo
+### 📊 Live Demo
 
-[![Streamlit App]([https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://startup-predictor.streamlit.app](https://startup-predictor-vqzdtqzhfqpdsus4htue5u.streamlit.app/))
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://startup-predictor-vqzdtqzhfqpdsus4htue5u.streamlit.app/)
 
 ## 📸 Screenshots Gallery
 
