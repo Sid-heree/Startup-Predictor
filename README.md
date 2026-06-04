@@ -28,6 +28,7 @@ An AI-powered web application that predicts startup success and forecasts future
 *Classification and regression metrics with confusion matrix*
 
 ### Success Prediction
+
 *Predict if your startup will succeed or fail*
 
 <img src="https://github.com/user-attachments/assets/c580bca6-2104-4559-81f2-413b4f028864" width="800" alt="Success Prediction - Success">
