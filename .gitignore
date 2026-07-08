@@ -1,6 +1,25 @@
+# Virtual environments
 venv/
+clean_env/
+env/
+ENV/
+venv.bak/
+env.bak/
+
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
+
+# Streamlit
+.streamlit/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
 .DS_Store
-.env
-*.ipynb_checkpoints/
+Thumbs.db
