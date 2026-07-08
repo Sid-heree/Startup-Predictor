@@ -101,15 +101,25 @@ st.markdown("""
 # ── Load models ────────────────────────────────────────────────────────────────
 @st.cache_resource
 def load_models():
-    log_model   = joblib.load("models/logistic_model.pkl")
-    lin_model   = joblib.load("models/linear_model.pkl")
+    # Classification models
+    cls_models = {
+        "Logistic Regression": joblib.load("models/logistic_model.pkl"),
+        "Random Forest":       joblib.load("models/rf_classifier.pkl"),
+        "Gradient Boosting":   joblib.load("models/gb_classifier.pkl"),
+    }
+    # Regression models
+    reg_models = {
+        "Linear Regression":   joblib.load("models/linear_model.pkl"),
+        "Random Forest":       joblib.load("models/rf_regressor.pkl"),
+        "Gradient Boosting":   joblib.load("models/gb_regressor.pkl"),
+    }
     sc_cls      = joblib.load("models/scaler_cls.pkl")
     sc_reg      = joblib.load("models/scaler_reg.pkl")
     le_industry = joblib.load("models/le_industry.pkl")
     le_stage    = joblib.load("models/le_stage.pkl")
     feat_cls    = joblib.load("models/features_cls.pkl")
     feat_reg    = joblib.load("models/features_reg.pkl")
-    return log_model, lin_model, sc_cls, sc_reg, le_industry, le_stage, feat_cls, feat_reg
+    return cls_models, reg_models, sc_cls, sc_reg, le_industry, le_stage, feat_cls, feat_reg
 
 @st.cache_data
 def load_data():
@@ -122,7 +132,7 @@ def load_metrics():
     except FileNotFoundError:
         return None
 
-log_model, lin_model, sc_cls, sc_reg, le_industry, le_stage, FEAT_CLS, FEAT_REG = load_models()
+CLS_MODELS, REG_MODELS, sc_cls, sc_reg, le_industry, le_stage, FEAT_CLS, FEAT_REG = load_models()
 df = load_data()
 metrics = load_metrics()
 
@@ -148,16 +158,22 @@ with st.sidebar:
         label_visibility="collapsed"
     )
     st.markdown("---")
-    st.markdown("**Models**")
+    st.markdown("**Classification Models**")
     st.info("Logistic Regression")
+    st.info("Random Forest")
+    st.info("Gradient Boosting")
+
+    st.markdown("**Regression Models**")
     st.info("Linear Regression")
+    st.info("Random Forest")
+    st.info("Gradient Boosting")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 1 — DASHBOARD
 # ══════════════════════════════════════════════════════════════════════════════
 if page == "🏠 Dashboard":
     st.markdown('<div class="page-title">Startup Success Predictor</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-sub">AI-powered predictions using Logistic Regression &amp; Multiple Linear Regression</div>', unsafe_allow_html=True)
+    st.markdown('<div class="page-sub">AI-powered predictions using Logistic Regression, Random Forest &amp; Gradient Boosting</div>', unsafe_allow_html=True)
 
     # KPI cards
     c1, c2, c3, c4 = st.columns(4)
@@ -242,55 +258,67 @@ if page == "🏠 Dashboard":
 # ══════════════════════════════════════════════════════════════════════════════
 elif page == "📊 Model Metrics":
     st.markdown('<div class="page-title">📊 Model Performance Metrics</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-sub">How accurate are our predictions?</div>', unsafe_allow_html=True)
-    
-    if metrics:
-        # Simple two-column layout for classification metrics
-        col1, col2 = st.columns(2)
-        
+    st.markdown('<div class="page-sub">Comparing Logistic Regression, Random Forest &amp; Gradient Boosting</div>', unsafe_allow_html=True)
+
+    if metrics and "classification_models" in metrics:
+        cls_m = metrics["classification_models"]
+        reg_m = metrics["regression_models"]
+        best_cls = metrics.get("best_classification_model")
+        best_reg = metrics.get("best_regression_model")
+
+        name_map = {
+            "logistic_regression": "Logistic Regression",
+            "linear_regression":   "Linear Regression",
+            "random_forest":       "Random Forest",
+            "gradient_boosting":   "Gradient Boosting",
+        }
+
+        # ── Classification comparison ──────────────────────────────────────
+        st.markdown("### 🎯 Classification Models (Success / Fail)")
+
+        cls_rows = []
+        for key, vals in cls_m.items():
+            cls_rows.append({
+                "Model": name_map.get(key, key) + (" 🏆" if key == best_cls else ""),
+                "Accuracy": vals["accuracy"],
+                "Precision": vals["precision"],
+                "Recall": vals["recall"],
+                "F1 Score": vals["f1"],
+            })
+        cls_df = pd.DataFrame(cls_rows)
+
+        col1, col2 = st.columns([1.1, 1])
         with col1:
-            st.markdown("### 🎯 Classification Model (Success/Fail)")
-            
-            # Simple metric cards
-            st.markdown(f"""
-            <div style="background:#1a1f30; border-radius:10px; padding:1rem; margin-bottom:1rem;">
-                <div style="font-size:0.85rem; color:#888;">Accuracy</div>
-                <div style="font-size:2rem; font-weight:700; color:#7c8cf8;">{metrics['accuracy']:.1%}</div>
-            </div>
-            <div style="background:#1a1f30; border-radius:10px; padding:1rem; margin-bottom:1rem;">
-                <div style="font-size:0.85rem; color:#888;">Precision</div>
-                <div style="font-size:2rem; font-weight:700; color:#7c8cf8;">{metrics['precision']:.1%}</div>
-            </div>
-            <div style="background:#1a1f30; border-radius:10px; padding:1rem;">
-                <div style="font-size:0.85rem; color:#888;">Recall</div>
-                <div style="font-size:2rem; font-weight:700; color:#7c8cf8;">{metrics['recall']:.1%}</div>
-            </div>
-            """, unsafe_allow_html=True)
-        
+            st.dataframe(
+                cls_df.style.format({
+                    "Accuracy": "{:.1%}", "Precision": "{:.1%}",
+                    "Recall": "{:.1%}", "F1 Score": "{:.1%}"
+                }),
+                use_container_width=True, hide_index=True
+            )
         with col2:
-            st.markdown("### 💰 Regression Model (Revenue)")
-            
-            st.markdown(f"""
-            <div style="background:#1a1f30; border-radius:10px; padding:1rem; margin-bottom:1rem;">
-                <div style="font-size:0.85rem; color:#888;">R² Score</div>
-                <div style="font-size:2rem; font-weight:700; color:#7c8cf8;">{metrics['r2']:.3f}</div>
-            </div>
-            <div style="background:#1a1f30; border-radius:10px; padding:1rem; margin-bottom:1rem;">
-                <div style="font-size:0.85rem; color:#888;">RMSE</div>
-                <div style="font-size:2rem; font-weight:700; color:#7c8cf8;">${metrics['rmse']:.1f}M</div>
-            </div>
-            <div style="background:#1a1f30; border-radius:10px; padding:1rem;">
-                <div style="font-size:0.85rem; color:#888;">F1 Score</div>
-                <div style="font-size:2rem; font-weight:700; color:#7c8cf8;">{metrics['f1']:.3f}</div>
-            </div>
-            """, unsafe_allow_html=True)
-        
-        # Simple confusion matrix
-        st.markdown("### 📊 Confusion Matrix")
-        cm = metrics['confusion_matrix']
+            fig_cls = go.Figure()
+            for metric_name in ["Accuracy", "Precision", "Recall", "F1 Score"]:
+                fig_cls.add_trace(go.Bar(
+                    name=metric_name,
+                    x=[name_map.get(k, k) for k in cls_m.keys()],
+                    y=[cls_m[k][metric_name.lower().replace(" score", "")] for k in cls_m.keys()],
+                ))
+            fig_cls.update_layout(
+                barmode="group",
+                paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                font_color="#aaa", height=320, margin=dict(t=20, b=20, l=10, r=10),
+                yaxis=dict(tickformat=".0%", gridcolor="rgba(255,255,255,0.06)"),
+                legend=dict(orientation="h", y=-0.15, font_color="#aaa"),
+                transition=dict(duration=0)
+            )
+            st.plotly_chart(fig_cls, use_container_width=True,
+                            config={"displayModeBar": False, "staticPlot": True})
+
+        # Confusion matrix for the best classifier
+        st.markdown(f"#### Confusion Matrix — {name_map.get(best_cls, best_cls)} (best model)")
+        cm = cls_m[best_cls]["confusion_matrix"]
         tn, fp, fn, tp = cm.ravel()
-        
-        # Simple table for confusion matrix
         st.markdown(f"""
         <div style="background:#1a1f30; border-radius:10px; padding:1rem;">
             <table style="width:100%; text-align:center; border-collapse:collapse;">
@@ -315,16 +343,94 @@ elif page == "📊 Model Metrics":
             </div>
         </div>
         """, unsafe_allow_html=True)
-        
+
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("---")
+
+        # ── Regression comparison ──────────────────────────────────────────
+        st.markdown("### 💰 Regression Models (Future Revenue)")
+
+        reg_rows = []
+        for key, vals in reg_m.items():
+            reg_rows.append({
+                "Model": name_map.get(key, key) + (" 🏆" if key == best_reg else ""),
+                "R² Score": vals["r2"],
+                "RMSE ($M)": vals["rmse"],
+                "MAE ($M)": vals["mae"],
+                "MAPE (%)": vals["mape"],
+            })
+        reg_df = pd.DataFrame(reg_rows)
+
+        col3, col4 = st.columns([1.1, 1])
+        with col3:
+            st.dataframe(
+                reg_df.style.format({
+                    "R² Score": "{:.3f}", "RMSE ($M)": "{:.2f}",
+                    "MAE ($M)": "{:.2f}", "MAPE (%)": "{:.1f}"
+                }),
+                use_container_width=True, hide_index=True
+            )
+        with col4:
+            fig_reg = go.Figure()
+            fig_reg.add_trace(go.Bar(
+                name="R² Score",
+                x=[name_map.get(k, k) for k in reg_m.keys()],
+                y=[reg_m[k]["r2"] for k in reg_m.keys()],
+                marker_color="#7c8cf8",
+            ))
+            fig_reg.update_layout(
+                paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+                font_color="#aaa", height=320, margin=dict(t=20, b=20, l=10, r=10),
+                yaxis=dict(gridcolor="rgba(255,255,255,0.06)", title="R² (higher is better)"),
+                showlegend=False,
+                transition=dict(duration=0)
+            )
+            st.plotly_chart(fig_reg, use_container_width=True,
+                            config={"displayModeBar": False, "staticPlot": True})
+
+        st.caption("🏆 marks the best-performing model — Random Forest / Gradient Boosting can beat "
+                   "Logistic/Linear Regression when relationships in the data are non-linear, but since "
+                   "this dataset's revenue formula is close to linear, Linear Regression still wins there.")
+
+    elif metrics:
+        # Fallback for old-format metrics.pkl (single logistic/linear model only)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("### 🎯 Classification Model (Success/Fail)")
+            st.markdown(f"""
+            <div style="background:#1a1f30; border-radius:10px; padding:1rem; margin-bottom:1rem;">
+                <div style="font-size:0.85rem; color:#888;">Accuracy</div>
+                <div style="font-size:2rem; font-weight:700; color:#7c8cf8;">{metrics['accuracy']:.1%}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        with col2:
+            st.markdown("### 💰 Regression Model (Revenue)")
+            st.markdown(f"""
+            <div style="background:#1a1f30; border-radius:10px; padding:1rem; margin-bottom:1rem;">
+                <div style="font-size:0.85rem; color:#888;">R² Score</div>
+                <div style="font-size:2rem; font-weight:700; color:#7c8cf8;">{metrics['r2']:.3f}</div>
+            </div>
+            """, unsafe_allow_html=True)
+        st.warning("⚠️ Run the updated `train_model.py` to unlock the full model comparison view.")
+
     else:
         st.warning("⚠️ Model metrics not found. Please run: `python train_model.py`")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 3 — PREDICT SUCCESS (All inputs in $M)
 # ══════════════════════════════════════════════════════════════════════════════
+# PAGE 3 — PREDICT SUCCESS (All inputs in $M)
 elif page == "🔮 Predict Success":
     st.markdown('<div class="page-title">🔮 Predict Success</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-sub">Logistic Regression · Binary Classification (All values in $M)</div>', unsafe_allow_html=True)
+
+    cls_choice = st.selectbox(
+        "Choose model",
+        list(CLS_MODELS.keys()),
+        key="cls_model_choice"
+    )
+    log_model = CLS_MODELS[cls_choice]
+
+    st.markdown(f'<div class="page-sub">{cls_choice} · Binary Classification (All values in $M)</div>', unsafe_allow_html=True)
 
     col_form, col_result = st.columns([1.3, 1])
 
@@ -425,7 +531,15 @@ elif page == "🔮 Predict Success":
 # ══════════════════════════════════════════════════════════════════════════════
 elif page == "💰 Revenue Forecast":
     st.markdown('<div class="page-title">💰 Revenue Forecast</div>', unsafe_allow_html=True)
-    st.markdown('<div class="page-sub">Multiple Linear Regression · Revenue Prediction (All values in $M)</div>', unsafe_allow_html=True)
+
+    reg_choice = st.selectbox(
+        "Choose model",
+        list(REG_MODELS.keys()),
+        key="reg_model_choice"
+    )
+    lin_model = REG_MODELS[reg_choice]
+
+    st.markdown(f'<div class="page-sub">{reg_choice} · Revenue Prediction (All values in $M)</div>', unsafe_allow_html=True)
 
     col_form, col_result = st.columns([1.3, 1])
 
